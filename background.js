@@ -1,14 +1,23 @@
-chrome.browserAction.onClicked.addListener(function(tab) {
-  chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-    var activeTab = tabs[0];
-    chrome.tabs.sendMessage(activeTab.id, {"message": "clicked_browser_action"});
-  });
-});
+chrome.browserAction.onClicked.addListener(() => {
+	chrome.tabs.create({ url: 'https://www.surveymonkey.com/r/CubicVotes' });
+  window.localStorage.setItem('clickedCubic', 'true')
+})
 
-chrome.runtime.onMessage.addListener(
-  function(request, sender, sendResponse) {
-    if( request.message === "open_new_tab" ) {
-      chrome.tabs.create({"url": request.url});
-    }
-  }
-);
+const checkTime = () => {
+	if(!window.localStorage.getItem('clickedCubic') && !window.sessionStorage.getItem('alertedCubic')){
+		let current = new Date()
+		current = current.getHours() + ':' + (current.getMinutes() < 10 ? '0' + current.getMinutes() : current.getMinutes()) + ':' + (current.getSeconds() < 10 ? '0' + current.getSeconds() : current.getSeconds())
+		// console.log(current)
+		if(current == '12:02:30'){
+			window.sessionStorage.setItem('alertedCubic', 'true')
+			const doVote = confirm('Vote, dummies!')
+			if(doVote){
+				chrome.tabs.create({ url: 'https://www.surveymonkey.com/r/CubicVotes' });
+	      window.localStorage.setItem('clickedCubic', 'true')
+			}
+		}
+		setTimeout(checkTime, 500)
+	}
+}
+
+checkTime()
