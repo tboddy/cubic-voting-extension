@@ -12,7 +12,7 @@ const checkTime = () => {
 		let current = new Date()
 		current = current.getHours() + ':' + (current.getMinutes() < 10 ? '0' + current.getMinutes() : current.getMinutes()) + ':' + (current.getSeconds() < 10 ? '0' + current.getSeconds() : current.getSeconds())
 		// console.log(current)
-		if(current == '11:00:00'){
+		if(current == '10:00:00'){
 			window.sessionStorage.setItem('alertedCubic', 'true')
 			const doVote = confirm('Vote, dummies!')
 			if(doVote){
